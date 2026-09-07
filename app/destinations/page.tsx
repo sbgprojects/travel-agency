@@ -5,7 +5,7 @@ import { Section, SectionHeading } from "@/components/ui";
 import { destinations, formatINR } from "@/lib/data";
 
 export const metadata: Metadata = {
-  title: "All Destinations | Yeto Holidays",
+  title: "All Destinations",
   description:
     "Browse every Yeto Holidays destination — Dubai, Vietnam, Thailand, Singapore, Europe, Malaysia, Bali and more — with itineraries, inclusions and indicative pricing.",
 };
@@ -14,7 +14,7 @@ export default function DestinationsPage() {
   const heroImages = destinations.flatMap((d) => d.images).slice(0, 6);
 
   return (
-    <main className="bg-sand-50">
+    <div className="bg-sand-50">
       {/* Hero */}
       <section className="relative flex h-[45svh] min-h-[320px] w-full items-end overflow-hidden bg-ocean-950">
         <SmartImage
@@ -102,6 +102,6 @@ export default function DestinationsPage() {
           ))}
         </div>
       </Section>
-    </main>
+    </div>
   );
 }

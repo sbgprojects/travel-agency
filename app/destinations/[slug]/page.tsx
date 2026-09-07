@@ -26,13 +26,13 @@ export async function generateMetadata({
 
   if (!destination) {
     return {
-      title: "Destination Not Found | Yeto Holidays",
+      title: "Destination Not Found",
       description: "This destination could not be found.",
     };
   }
 
   return {
-    title: `${destination.name} Tour Package | Yeto Holidays`,
+    title: `${destination.name} Tour Package`,
     description: destination.blurb,
   };
 }
@@ -74,7 +74,7 @@ export default async function DestinationPage({
   const enquiryMessage = `Hi Yeto Holidays, I'd like to enquire about the ${destination.name} package (${destination.nights}N/${destination.days}D). Please share more details.`;
 
   return (
-    <main className="bg-sand-50 pb-28 lg:pb-0">
+    <div className="bg-sand-50 pb-28 lg:pb-0">
       {/* Hero */}
       <section className="relative flex h-[70svh] min-h-[480px] w-full items-end overflow-hidden bg-ocean-950">
         <SmartImage
@@ -350,6 +350,6 @@ export default async function DestinationPage({
           Enquire
         </a>
       </div>
-    </main>
+    </div>
   );
 }

@@ -4,7 +4,7 @@ import { CONTACT } from "@/lib/data";
 import PlanForm from "./PlanForm";
 
 export const metadata: Metadata = {
-  title: "Plan My Trip | Yeto Holidays",
+  title: "Plan My Trip",
   description:
     "Tell us where you want to go and we'll build a tailored Yeto Holidays itinerary for you — share your details and we'll be in touch.",
 };
@@ -26,7 +26,7 @@ const STEPS = [
 
 export default function PlanPage() {
   return (
-    <main className="bg-sand-50">
+    <div className="bg-sand-50">
       {/* Hero */}
       <section className="bg-ocean-900 px-5 pb-14 pt-28 sm:px-8 sm:pb-16 sm:pt-32">
         <div className="mx-auto max-w-6xl">
@@ -106,6 +106,6 @@ export default function PlanPage() {
           </aside>
         </div>
       </section>
-    </main>
+    </div>
   );
 }
