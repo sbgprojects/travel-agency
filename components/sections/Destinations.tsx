@@ -6,11 +6,9 @@ import { featuredDestinations, formatINR, type Destination } from "@/lib/data";
 function DestinationCard({
   destination,
   large = false,
-  priority = false,
 }: {
   destination: Destination;
   large?: boolean;
-  priority?: boolean;
 }) {
   return (
     <Link
@@ -25,7 +23,6 @@ function DestinationCard({
         className={`w-full aspect-[4/5] ${large ? "lg:h-full lg:aspect-auto" : ""}`}
         imageClassName="transition-transform duration-500 ease-out group-hover:scale-105"
         overlay="bottom"
-        priority={priority}
         sizes="(max-width: 640px) 80vw, (max-width: 1024px) 50vw, 33vw"
       />
       <div className="pointer-events-none absolute inset-x-0 bottom-0 p-5 text-white">
@@ -63,7 +60,6 @@ export default function Destinations() {
             key={destination.slug}
             destination={destination}
             large={index === 0}
-            priority={index === 0}
           />
         ))}
       </div>

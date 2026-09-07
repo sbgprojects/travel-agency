@@ -66,26 +66,39 @@ body {
   scroll-margin-top: 6rem;
 }
 
-/* Reveal-on-scroll: starts hidden, IntersectionObserver adds .is-visible */
-.reveal {
+/* Reveal-on-scroll.
+   Progressive enhancement: content is visible by default, so it still renders
+   with JavaScript disabled or if hydration fails. The inline script in the
+   layout sets `data-js` on <html> before first paint, and only then do these
+   blocks start hidden and animate in.
+   `will-change` is deliberately omitted — promoting every reveal block to its
+   own compositor layer for the life of the page costs more than it buys. */
+:root[data-js] .reveal {
   opacity: 0;
   transform: translateY(24px);
+}
+
+:root[data-js] .reveal.is-visible {
+  opacity: 1;
+  transform: none;
   transition:
     opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
     transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
-  will-change: opacity, transform;
-}
-
-.reveal.is-visible {
-  opacity: 1;
-  transform: none;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .reveal {
+  :root[data-js] .reveal {
     opacity: 1;
     transform: none;
   }
+}
+
+/* Every photo sits on a brand gradient. If a remote image 404s, hide the
+   broken-image glyph and alt text so the gradient stands in cleanly — this is
+   the CSS-only replacement for gating visibility on a JS onLoad handler. */
+img {
+  color: transparent;
+  font-size: 0;
 }
 
 /* Horizontal snap rails used by the mobile-first card carousels */

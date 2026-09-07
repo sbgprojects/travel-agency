@@ -1,18 +1,12 @@
-"use client";
-
-import { useMemo, useState } from "react";
-import { ButtonLink, Section, SectionHeading } from "@/components/ui";
+import { Section, SectionHeading } from "@/components/ui";
 import { formatINR } from "@/lib/data";
+import EmiCalculator from "./EmiCalculator";
 
-const VALUES = [40000, 60000, 100000, 150000];
-const TENURES = [3, 6, 9, 12];
-
+/**
+ * Server component. Only the calculator below is interactive, so it is the
+ * lone client island — everything here renders to static HTML.
+ */
 export default function EmiPlan() {
-  const [value, setValue] = useState(60000);
-  const [months, setMonths] = useState(6);
-
-  const monthly = useMemo(() => Math.round(value / months), [value, months]);
-
   return (
     <Section id="emi" className="bg-ocean-950">
       <SectionHeading
@@ -46,12 +40,14 @@ export default function EmiPlan() {
             />
           </div>
 
-          {/* Timeline */}
-          {/* Sized so all seven markers fit a 360px screen without scrolling;
-              overflow-x stays as a safety net on very narrow devices. */}
+          {/* Timeline — sized so all seven markers fit a 360px screen without
+              scrolling; overflow-x stays as a safety net on narrower devices. */}
           <div className="snap-rail mt-7 flex items-center gap-1.5 overflow-x-auto pb-1 sm:gap-2">
             {Array.from({ length: 6 }).map((_, i) => (
-              <div key={i} className="flex flex-shrink-0 flex-col items-center gap-1.5">
+              <div
+                key={i}
+                className="flex flex-shrink-0 flex-col items-center gap-1.5"
+              >
                 <span className="flex h-7 w-7 items-center justify-center rounded-full bg-sand-400 text-[0.7rem] font-bold text-ocean-950 sm:h-8 sm:w-8">
                   {i + 1}
                 </span>
@@ -73,88 +69,19 @@ export default function EmiPlan() {
           </div>
         </div>
 
-        {/* Calculator */}
-        <div className="rounded-2xl border border-white/10 bg-white/5 p-6 backdrop-blur sm:p-8">
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-sand-300">
-            Try it yourself
-          </p>
-
-          <fieldset className="mt-5">
-            <legend className="text-sm text-white/70">Holiday value</legend>
-            <div className="mt-2.5 flex flex-wrap gap-2">
-              {VALUES.map((v) => (
-                <button
-                  key={v}
-                  type="button"
-                  onClick={() => setValue(v)}
-                  aria-pressed={value === v}
-                  className={`rounded-full border px-4 py-2 text-sm font-medium transition-colors ${
-                    value === v
-                      ? "border-sand-300 bg-sand-400 text-ocean-950"
-                      : "border-white/20 bg-transparent text-white/80 hover:border-white/40"
-                  }`}
-                >
-                  {formatINR(v)}
-                </button>
-              ))}
-            </div>
-          </fieldset>
-
-          <fieldset className="mt-6">
-            <legend className="text-sm text-white/70">Pay over</legend>
-            <div className="mt-2.5 flex flex-wrap gap-2">
-              {TENURES.map((m) => (
-                <button
-                  key={m}
-                  type="button"
-                  onClick={() => setMonths(m)}
-                  aria-pressed={months === m}
-                  className={`rounded-full border px-4 py-2 text-sm font-medium transition-colors ${
-                    months === m
-                      ? "border-sand-300 bg-sand-400 text-ocean-950"
-                      : "border-white/20 bg-transparent text-white/80 hover:border-white/40"
-                  }`}
-                >
-                  {m} months
-                </button>
-              ))}
-            </div>
-          </fieldset>
-
-          <div className="mt-7 rounded-xl bg-ocean-900/70 p-5 text-center">
-            <p className="text-xs uppercase tracking-[0.2em] text-white/50">
-              Illustrative monthly instalment
-            </p>
-            <p className="mt-2 font-display text-4xl text-white sm:text-5xl">
-              {formatINR(monthly)}
-              <span className="text-base font-sans text-white/50">/mo</span>
-            </p>
-            <p className="mt-1 text-xs text-white/50">
-              {formatINR(value)} ÷ {months} months
-            </p>
-          </div>
-
-          <ButtonLink
-            href="/plan?intent=emi"
-            variant="sand"
-            size="lg"
-            className="mt-6 w-full"
-          >
-            Check My EMI Plan
-          </ButtonLink>
-        </div>
+        <EmiCalculator />
       </div>
 
       {/* Compliance disclaimer — required, always visible */}
       <p className="reveal mt-8 max-w-3xl text-xs leading-relaxed text-white/60 sm:text-sm">
-        Illustration only. The figures above simply divide the holiday value
-        by the number of months and do not include interest, processing fees
-        or taxes. Yeto Holidays is not a lender. Instalment plans are offered
-        only through regulated financing partners, and the applicable
-        interest rate, fees, tenure and eligibility criteria are set by that
-        partner and shared with you in writing before you commit. Approval is
-        subject to the partner&apos;s checks. Travel dates are confirmed only
-        after the booking terms are met.
+        Illustration only. The figures above simply divide the holiday value by
+        the number of months and do not include interest, processing fees or
+        taxes. Yeto Holidays is not a lender. Instalment plans are offered only
+        through regulated financing partners, and the applicable interest rate,
+        fees, tenure and eligibility criteria are set by that partner and shared
+        with you in writing before you commit. Approval is subject to the
+        partner&apos;s checks. Travel dates are confirmed only after the booking
+        terms are met.
       </p>
     </Section>
   );
@@ -168,7 +95,9 @@ function Step({ n, title, body }: { n: number; title: string; body: string }) {
       </span>
       <div>
         <p className="text-sm font-semibold text-white">{title}</p>
-        <p className="mt-0.5 text-xs leading-relaxed text-white/60 sm:text-sm">{body}</p>
+        <p className="mt-0.5 text-xs leading-relaxed text-white/60 sm:text-sm">
+          {body}
+        </p>
       </div>
     </div>
   );

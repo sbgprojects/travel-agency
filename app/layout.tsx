@@ -5,17 +5,24 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import Reveal from "@/components/Reveal";
 
+// next/font self-hosts both families at build time — no request to Google at
+// runtime, and no layout shift thanks to the generated fallback metrics.
+// Both are variable fonts, so one file covers every weight. Fraunces' optional
+// SOFT and WONK axes are deliberately not requested: enabling them grew the
+// preloaded font payload from 107KB to 163KB for no visible benefit here.
 const fraunces = Fraunces({
   variable: "--font-fraunces",
   subsets: ["latin"],
   display: "swap",
-  axes: ["SOFT", "WONK"],
+  style: ["normal", "italic"],
+  preload: true,
 });
 
 const jakarta = Plus_Jakarta_Sans({
   variable: "--font-plus-jakarta",
   subsets: ["latin"],
   display: "swap",
+  preload: true,
 });
 
 export const metadata: Metadata = {
@@ -63,6 +70,21 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" className={`${fraunces.variable} ${jakarta.variable}`}>
+      <head>
+        {/* Runs before first paint, and is the only inline script on the page.
+            1. Marks that scripting is available, so scroll-reveal blocks start
+               hidden — without JS the page still renders in full.
+            2. One capturing listener hides any image that fails to load, so the
+               brand gradient behind it shows through instead of a broken-image
+               glyph. Doing this globally keeps <SmartImage> a server component:
+               images stay in the initial HTML and are never gated behind an
+               onLoad handler, which would push the LCP paint past hydration. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `document.documentElement.setAttribute("data-js","");addEventListener("error",function(e){var t=e.target;if(t&&t.tagName==="IMG"){t.style.visibility="hidden"}},true)`,
+          }}
+        />
+      </head>
       <body className="bg-white text-ocean-900 antialiased">
         <a
           href="#main"

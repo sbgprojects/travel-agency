@@ -48,7 +48,7 @@ export default function DestinationsPage() {
         />
 
         <div className="reveal mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {destinations.map((destination, index) => (
+          {destinations.map((destination) => (
             <Link
               key={destination.slug}
               href={`/destinations/${destination.slug}`}
@@ -60,7 +60,6 @@ export default function DestinationsPage() {
                 className="aspect-[4/3] w-full"
                 imageClassName="transition-transform duration-500 ease-out group-hover:scale-105"
                 overlay="bottom"
-                priority={index < 3}
                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
               />
 

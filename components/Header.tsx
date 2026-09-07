@@ -68,10 +68,22 @@ export default function Header() {
   const menuId = useId();
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24);
+    // Coalesce scroll events into one read per frame; reading scrollY straight
+    // from the handler forces layout on every event during a fast scroll.
+    let frame = 0;
+    const onScroll = () => {
+      if (frame) return;
+      frame = requestAnimationFrame(() => {
+        frame = 0;
+        setScrolled(window.scrollY > 24);
+      });
+    };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
+    return () => {
+      if (frame) cancelAnimationFrame(frame);
+      window.removeEventListener("scroll", onScroll);
+    };
   }, []);
 
   useEffect(() => {
